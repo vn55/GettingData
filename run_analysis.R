@@ -27,9 +27,22 @@ names(labels) <- c("ActivityCode","ActivityLabel")
 
 ### INCLUDE ACTIVITY NAMES IN THE TRAIN AND TEST DATASETS 
 
+# -- to keep the original order, save order in a new auxiliary variable
+
+labelstrain$id  <- 1:nrow(labelstrain)
+labelstest$id  <- 1:nrow(labelstest)
+
 labelstrain <- merge(labelstrain,labels,by.x="V1",by.y="ActivityCode",all=TRUE)
 labelstest <- merge(labelstest,labels,by.x="V1",by.y="ActivityCode",all=TRUE)
 
+# -- ordering as original
+
+labelstrain <- labelstrain[order(labelstrain$id), ]
+labelstest <- labelstest[order(labelstest$id), ]
+
+# -- delete auxiliary variable as no longer needed
+labelstrain$id = NULL
+labelstest$id = NULL
 
 ### MERGING TRAIN AND TEST ###
 
@@ -38,13 +51,13 @@ testcomplete <- cbind(subjecttest,labelstest,test)
 
 data <- rbind(traincomplete,testcomplete)
 
-### CORRECTLY NAME THE VARIABLES ###
+### CORRECTLY NAME THE VARIABLES (are previously labeled V1, V2, V3, etc) ###
 
 allLabels <-  c("Subject","ActivityCode","ActivityLabel",paste(features$V2))
 
 names(data) <- allLabels 
 
-### SELECT COLUMNS WITH MEAN AND SD ON NAME, 
+### SELECT COLUMNS WITH MEAN AND SD ANYWHERE ON NAME, 
 ### WHILE KEEPING SUBJECT AND ACTIVITY
 ### IN THE OUTPUT 
 
@@ -53,6 +66,90 @@ finaldata <- data[,grep("Subject|ActivityLabel|mean|std",names(data))]
 ### CREATING FILE TO SUBMIT###
 
 library(plyr)
+
+#- creating descriptive variable names -#
+varnames <- c("Subject","ActivityLabel",
+"meanTimeOfBodyAccelerationSignalfromAccelerometerIntheXdirection",
+"meanTimeOfBodyAccelerationSignalfromAccelerometerIntheYdirection",
+"meanTimeOfBodyAccelerationSignalfromAccelerometerIntheZdirection",
+"stdTimeOfBodyAccelerationSignalfromAccelerometerIntheXdirection",
+"stdTimeOfBodyAccelerationSignalfromAccelerometerIntheYdirection",
+"stdTimeOfBodyAccelerationSignalfromAccelerometerIntheZdirection",
+"meanTimeOfGravityAccelerationSignalfromAccelerometerIntheXdirection",
+"meanTimeOfGravityAccelerationSignalfromAccelerometerIntheYdirection",
+"meanTimeOfGravityAccelerationSignalfromAccelerometerIntheZdirection",
+"stdTimeOfGravityAccelerationSignalfromAccelerometerIntheXdirection",
+"stdTimeOfGravityAccelerationSignalfromAccelerometerIntheYdirection",
+"stdTimeOfGravityAccelerationSignalfromAccelerometerIntheZdirection",
+"meanTimeOfBodyJerkAccelerationSignalfromAccelerometerIntheXdirection",
+"meanTimeOfBodyJerkAccelerationSignalfromAccelerometerIntheYdirection",
+"meanTimeOfBodyJerkAccelerationSignalfromAccelerometerIntheZdirection",
+"stdTimeOfBodyJerkAccelerationSignalfromAccelerometerIntheXdirection",
+"stdTimeOfBodyJerkAccelerationSignalfromAccelerometerIntheYdirection",
+"stdTimeOfBodyJerkAccelerationSignalfromAccelerometerIntheZdirection",
+"meanTimeOfBodyAccelerationSignalfromGyroscopeIntheXdirection",
+"meanTimeOfBodyAccelerationSignalfromGyroscopeIntheYdirection",
+"meanTimeOfBodyAccelerationSignalfromGyroscopeIntheZdirection",
+"stdTimeOfBodyAccelerationSignalfromGyroscopeIntheXdirection",
+"stdTimeOfBodyAccelerationSignalfromGyroscopeIntheYdirection",
+"stdTimeOfBodyAccelerationSignalfromGyroscopeIntheZdirection",
+"meanTimeOfBodyJerkAccelerationSignalfromGyroscopeIntheXdirection",
+"meanTimeOfBodyJerkAccelerationSignalfromGyroscopeIntheYdirection",
+"meanTimeOfBodyJerkAccelerationSignalfromGyroscopeIntheZdirection",
+"stdTimeOfBodyJerkAccelerationSignalfromGyroscopeIntheXdirection",
+"stdTimeOfBodyJerkAccelerationSignalfromGyroscopeIntheYdirection",
+"stdTimeOfBodyJerkAccelerationSignalfromGyroscopeIntheZdirection",
+"meanTimeOfBodyMagnitudeAccelerationSignalfromAccelerometer",
+"stdTimeOfBodyMagnitudeAccelerationSignalfromAccelerometer",
+"meanTimeOfGravityMagnitudeAccelerationSignalfromAccelerometer",
+"stdTimeOfGravityMagnitudeAccelerationSignalfromAccelerometer",
+"meanTimeOfBodyJerkMagnitudeAccelerationSignalfromAccelerometer",
+"stdTimeOfBodyJerkMagnitudeAccelerationSignalfromAccelerometer",
+"meanTimeOfBodyMagnitudeAccelerationSignalfromGyroscope",
+"stdTimeOfBodyMagnitudeAccelerationSignalfromGyroscope",
+"meanTimeOfBodyJerkMagnitudeAccelerationSignalfromGyroscope",
+"stdTimeOfBodyJerkMagnitudeAccelerationSignalfromGyroscope",
+"meanFrequencyOfBodyAccelerationSignalfromAccelerometerIntheXdirection",
+"meanFrequencyOfBodyAccelerationSignalfromAccelerometerIntheYdirection",
+"meanFrequencyOfBodyAccelerationSignalfromAccelerometerIntheZdirection",
+"stdFrequencyOfBodyAccelerationSignalfromAccelerometerIntheXdirection",
+"stdFrequencyOfBodyAccelerationSignalfromAccelerometerIntheYdirection",
+"stdFrequencyOfBodyAccelerationSignalfromAccelerometerIntheZdirection",
+"weightedAverageOfFrequencyComponentsOfBodyAccelerationSignalfromAccelerometerIntheXdirection",
+"weightedAverageOfFrequencyComponentsOfBodyAccelerationSignalfromAccelerometerIntheYdirection",
+"weightedAverageOfFrequencyComponentsOfBodyAccelerationSignalfromAccelerometerIntheZdirection",
+"meanFrequencyOfBodyJerkAccelerationSignalfromAccelerometerIntheXdirection",
+"meanFrequencyOfBodyJerkAccelerationSignalfromAccelerometerIntheYdirection",
+"meanFrequencyOfBodyJerkAccelerationSignalfromAccelerometerIntheZdirection",
+"stdFrequencyOfBodyJerkAccelerationSignalfromAccelerometerIntheXdirection",
+"stdFrequencyOfBodyJerkAccelerationSignalfromAccelerometerIntheYdirection",
+"stdFrequencyOfBodyJerkAccelerationSignalfromAccelerometerIntheZdirection",
+"weightedAverageOfFrequencyComponentsOfBodyJerkAccelerationSignalfromAccelerometerIntheXdirection",
+"weightedAverageOfFrequencyComponentsOfBodyJerkAccelerationSignalfromAccelerometerIntheYdirection",
+"weightedAverageOfFrequencyComponentsOfBodyJerkAccelerationSignalfromAccelerometerIntheZdirection",
+"meanFrequencyOfBodyAccelerationSignalfromGyroscopeIntheXdirection",
+"meanFrequencyOfBodyAccelerationSignalfromGyroscopeIntheYdirection",
+"meanFrequencyOfBodyAccelerationSignalfromGyroscopeIntheZdirection",
+"stdFrequencyOfBodyAccelerationSignalfromGyroscopeIntheXdirection",
+"stdFrequencyOfBodyAccelerationSignalfromGyroscopeIntheYdirection",
+"stdFrequencyOfBodyAccelerationSignalfromGyroscopeIntheZdirection",
+"weightedAverageOfFrequencyComponentsOfBodyAccelerationSignalfromGyroscopeIntheXdirection",
+"weightedAverageOfFrequencyComponentsOfBodyAccelerationSignalfromGyroscopeIntheYdirection",
+"weightedAverageOfFrequencyComponentsOfBodyAccelerationSignalfromGyroscopeIntheZdirection",
+"meanFrequencyOfBodyMagnitudeAccelerationSignalfromAccelerometer",
+"stdFrequencyOfBodyMagnitudeAccelerationSignalfromAccelerometer",
+"weightedAverageOfFrequencyComponentsOfBodyMagnitudeAccelerationSignalfromAccelerometer",
+"meanFrequencyOfBodyJerkMagnitudeAccelerationSignalfromAccelerometer",
+"stdFrequencyOfBodyJerkMagnitudeAccelerationSignalfromAccelerometer",
+"weightedAverageOfFrequencyComponentsOfBodyJerkMagnitudeAccelerationSignalfromAccelerometer",
+"meanFrequencyOfBodyMagnitudeAccelerationSignalfromGyroscope",
+"stdFrequencyOfBodyMagnitudeAccelerationSignalfromGyroscope",
+"weightedAverageOfFrequencyComponentsOfBodyMagnitudeAccelerationSignalfromGyroscope",
+"meanFrequencyOfBodyJerkMagnitudeAccelerationSignalfromGyroscope",
+"stdFrequencyOfBodyJerkMagnitudeAccelerationSignalfromGyroscope",
+"weightedAverageOfFrequencyComponentsOfBodyJerkMagnitudeAccelerationSignalfromGyroscope")
+
+names(finaldata) <- varnames
 
 subm <- ddply(finaldata,.(Subject,ActivityLabel),numcolwise(mean))
 

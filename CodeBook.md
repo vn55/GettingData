@@ -6,7 +6,7 @@ This is part of the project for the Getting Data Course by Jeff Leek
 -------
 
 >The file contains 180 observations, one for each of 30 participants 
-> by each of 6 activitites. There are 81 variables. The first variable denotes the participant and is called "Subject" The second variable denotes the activity to which the measurement refers and is called "ActivityLabel". The 79 average measurements are presented below. Each measurement is normalized and bounded within [-1,1]. Due to the length of the names I used Camelcase to distinguish the individual parts of the variable names. The name of each variable represents a detailed description of its meaning. 
+> by each of 6 activitites. There are 81 variables. The first variable denotes the participant and is called "Subject". The second variable denotes the activity to which the measurement refers and is called "ActivityLabel". The 79 average measurements are presented below. Each measurement is normalized and bounded within [-1,1]. Due to the length of the names I used Camelcase to distinguish the individual parts of the variable names. The name of each variable represents a detailed description of its meaning. 
 
 1. meanTimeOfBodyAccelerationSignalfromAccelerometerIntheXdirection
 2. meanTimeOfBodyAccelerationSignalfromAccelerometerIntheYdirection

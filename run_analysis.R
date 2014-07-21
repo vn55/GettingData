@@ -151,7 +151,12 @@ varnames <- c("Subject","ActivityLabel",
 
 names(finaldata) <- varnames
 
+### CREATING a second, independent tidy data set with the average of each variable 
+### for each activity and each subject. 
+
 subm <- ddply(finaldata,.(Subject,ActivityLabel),numcolwise(mean))
+
+### SAVING SUBMISSION FILE
 
 write.table(subm,"submissionfile.txt")
 
